@@ -5,10 +5,20 @@ using UnityEngine;
 
 public class DamageGun : MonoBehaviour
 {
-    public float damage;
-    public float bulletRange;
+    [Header("References")]
     private Transform PlayerCamera;
     public GameObject impactObject;
+    public Gun gun;
+
+
+
+    [Header("Configurations")]
+    [SerializeField]
+    float damage;
+
+
+
+
 
 
 
@@ -19,15 +29,15 @@ public class DamageGun : MonoBehaviour
         
     }
 
-    public void Shoot()
+    public void Shoot()         //handles firing/ hit registration
     {
-        Ray gunRay = new Ray(PlayerCamera.position, PlayerCamera.forward);
-        if (Physics.Raycast(gunRay, out RaycastHit hitInfo, bulletRange))
+        Ray gunRay = new Ray(PlayerCamera.position, PlayerCamera.forward);      //fires a raycast from camera object
+        if (Physics.Raycast(gunRay, out RaycastHit hitInfo, gun.bulletRange))       
         {
-            Instantiate(impactObject, hitInfo.point, Quaternion.identity);
-            if (hitInfo.collider.gameObject.TryGetComponent(out Entity enemy))
+            Instantiate(impactObject, hitInfo.point, Quaternion.identity);      //creates an instance of the impact object on impact location
+            if (hitInfo.collider.gameObject.TryGetComponent(out Entity enemy))  //runs if hit entity is a target
             {
-                enemy.Health -= damage;
+                enemy.Health -= damage;                                         //deals damage to targets health
             }
         }
         

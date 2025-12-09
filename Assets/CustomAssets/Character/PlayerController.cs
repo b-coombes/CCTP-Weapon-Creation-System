@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("References")]
+    [Header("References")]      //other scripts references to be used
     public Rigidbody rigid_body;
     public Transform head;
     public new Camera camera;
 
 
-    [Header("configurations")]
+    [Header("Configurations")]      //changeable variables to affect the player
     public float walk_speed;
     public float run_speed;
 
-    [Header("Accessed Elsewhere")]
+    [Header("Accessed Elsewhere")]          //variables needed for other scripts but stored here
     public bool inRange;
     public bool vPressed = false;
 
@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //makes cursor invisible and locks it to the center of the screen
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -39,7 +40,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 new_velocity = Vector3.up * rigid_body.linearVelocity.y;
-        float speed = Input.GetKey(KeyCode.LeftShift) ? run_speed : walk_speed;
+        float speed = Input.GetKey(KeyCode.LeftShift) ? run_speed : walk_speed;     //increase speed on shift button down
         new_velocity.x = Input.GetAxis("Horizontal") * speed;
         new_velocity.z = Input.GetAxis("Vertical") * speed;
         rigid_body.linearVelocity = transform.TransformDirection(new_velocity);
@@ -53,7 +54,7 @@ public class PlayerController : MonoBehaviour
         e.x = RestrictAngle(e.x, -85f, 85f);
         head.eulerAngles = e;
     }
-
+    //restrics camera from going too far up/down
     public static float RestrictAngle(float angle, float angle_min, float angle_max)
     {
         if (angle > 180)

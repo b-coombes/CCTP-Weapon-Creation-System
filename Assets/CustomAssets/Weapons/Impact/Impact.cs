@@ -10,8 +10,8 @@ public class Impact : MonoBehaviour
     void Start()
     {
         despawnTime += Time.time;
-        Debug.Log("spawn");
-        Debug.Log(despawnTime);
+        //Debug.Log("spawn");
+        //Debug.Log(despawnTime);
     }
 
     // Update is called once per frame
@@ -21,9 +21,9 @@ public class Impact : MonoBehaviour
         if (currentTime >= despawnTime) 
         { 
             Destroy(gameObject);
-            Debug.Log("despawn");
+            //Debug.Log("despawn");
             
         }
-        Debug.Log(currentTime);
+        //Debug.Log(currentTime);
     }
 }

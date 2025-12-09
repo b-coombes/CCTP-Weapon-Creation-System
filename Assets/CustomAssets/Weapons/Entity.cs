@@ -4,11 +4,16 @@ using System.Collections.Generic;
 
 public class Entity : MonoBehaviour
 {
+    [Header("Configurations")]
     [SerializeField]
-    private float startingHealth;
-    private float health;
+    public float startingHealth;
 
-    public float displayHealth;
+
+    [Header("Display Variables")]
+    [SerializeField]
+    public float health;
+
+
     
     
     
@@ -21,9 +26,8 @@ public class Entity : MonoBehaviour
         set
         {
             health = value;
-            Debug.Log(health);
+            //Debug.Log(health);
 
-            displayHealth = value;
 
             if (health <= 0f)
             {
