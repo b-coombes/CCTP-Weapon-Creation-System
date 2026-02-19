@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Random = System.Random;
 
 public class WeaponCreation : MonoBehaviour
@@ -11,6 +12,7 @@ public class WeaponCreation : MonoBehaviour
     private GameObject body;
     private GameObject barrel;
 
+    public SkinnedMeshRenderer gunMesh;
 
 
 
@@ -20,7 +22,9 @@ public class WeaponCreation : MonoBehaviour
         stock = this.gameObject.transform.GetChild(0).gameObject;
         body = this.gameObject.transform.GetChild(1).gameObject;
         barrel = this.gameObject.transform.GetChild(2).gameObject;
-
+        
+        
+        
         Randomise();
     
     
@@ -29,9 +33,159 @@ public class WeaponCreation : MonoBehaviour
 
     public void Randomise()
     {
+        gunScript.shotgun = false;
+        gunScript.isAutomatic = false;
+
+        Random rnd = new Random();
+        
+        int morphIntensity = rnd.Next(1, 201);
+
+        if (morphIntensity < 100)
+        {
+            gunMesh.SetBlendShapeWeight(gunMesh.sharedMesh.GetBlendShapeIndex("Key 2"), morphIntensity);
+            gunMesh.SetBlendShapeWeight(gunMesh.sharedMesh.GetBlendShapeIndex("Key 1"), 0f);
+        }
+        else if (morphIntensity == 100)
+        {
+            gunMesh.SetBlendShapeWeight(gunMesh.sharedMesh.GetBlendShapeIndex("Key 1"), 0f);
+            gunMesh.SetBlendShapeWeight(gunMesh.sharedMesh.GetBlendShapeIndex("Key 2"), 0f);
+        }
+        else if (morphIntensity > 100)
+        {
+            gunMesh.SetBlendShapeWeight(gunMesh.sharedMesh.GetBlendShapeIndex("Key 1"), (morphIntensity - 100));
+            gunMesh.SetBlendShapeWeight(gunMesh.sharedMesh.GetBlendShapeIndex("Key 2"), 0f);
+        }
+
+        if (morphIntensity < 66.6)
+        {
+            //shotgun
+
+
+            gunScript.shotgun = true;
+            gunScript.shotgunSpread = (morphIntensity / 10);
+            gunScript.bulletRange = (100 - morphIntensity) / 10;
+
+            if (morphIntensity <= 11)
+            {
+                gunScript.shotgunPellets = 2;
+                gunScript.damage = 50;
+            }
+            else if (morphIntensity > 11 && morphIntensity <= 22)
+            {
+                gunScript.shotgunPellets = 3;
+                gunScript.damage = 45;
+            }
+            else if (morphIntensity > 22 && morphIntensity <= 33)
+            {
+                gunScript.shotgunPellets = 4;
+                gunScript.damage = 40;
+            }
+            else if (morphIntensity > 33 && morphIntensity <= 44)
+            {
+                gunScript.shotgunPellets = 5;
+                gunScript.damage = 35;
+            }
+            else if (morphIntensity > 44 && morphIntensity <= 55)
+            {
+                gunScript.shotgunPellets = 6;
+                gunScript.damage = 30;
+            }
+            else if (morphIntensity > 55 && morphIntensity <= 66)
+            {
+                gunScript.shotgunPellets = 7;
+                gunScript.damage = 25;
+            }
+        }
+        else if (morphIntensity >= 66.6 && morphIntensity <= 133.3) 
+        {
+            //Auto Rifle
+            if(morphIntensity < 100)
+            {
+                gunScript.shotgun = true;
+                gunScript.shotgunSpread = (morphIntensity / 10);
+                gunScript.bulletRange = (100 - morphIntensity) / 20;
+                gunScript.isAutomatic = true;
+
+                if (morphIntensity <= 77)
+                {
+                    gunScript.shotgunPellets = 6;
+                    gunScript.damage = 25;
+                }
+                else if (morphIntensity > 77 && morphIntensity <= 88)
+                {
+                    gunScript.shotgunPellets = 4;
+                    gunScript.damage = 20;
+                }
+                else if (morphIntensity > 88 && morphIntensity < 100)
+                {
+                    gunScript.shotgunPellets = 2;
+                    gunScript.damage = 15;
+                }
+
+            }
+            else if(morphIntensity == 100)
+            {
+                gunScript.isAutomatic = true;
+                gunScript.damage = 10;
+            }
+            else if(morphIntensity > 100)
+            {
+                gunScript.bulletRange = 100 - (morphIntensity / 2);
+
+                if (morphIntensity > 100 && morphIntensity <= 111)
+                {
+                    gunScript.damage = 20;
+                }
+                else if (morphIntensity > 111 && morphIntensity <= 122)
+                {
+                    gunScript.damage = 30;
+                }
+                else if (morphIntensity > 122 && morphIntensity < 133)
+                {
+                    gunScript.damage = 40;
+                }
+            }
+
+
+        }
+        else if(morphIntensity >= 133)
+        {
+            //Sniper Rifle
+            
+
+            gunScript.bulletRange = 100 - morphIntensity;
+
+            if (morphIntensity > 133 && morphIntensity <= 144)
+            {
+                gunScript.damage = 50;
+            }
+            else if (morphIntensity > 144 && morphIntensity <= 155)
+            {
+                gunScript.damage = 60;
+            }
+            else if (morphIntensity > 155 && morphIntensity < 166)
+            {
+                gunScript.damage = 70;
+            }
+            if (morphIntensity > 166 && morphIntensity <= 177)
+            {
+                gunScript.damage = 80;
+            }
+            else if (morphIntensity > 177 && morphIntensity <= 188)
+            {
+                gunScript.damage = 90;
+            }
+            else if (morphIntensity > 199 && morphIntensity <= 200)
+            {
+                gunScript.damage = 100;
+            }
+        }
+        
+        /*
         Creation(stock, 1);
         Creation(body, 2);
         Creation(barrel, 3);
+        */
     }
 
     // Update is called once per frame
@@ -58,7 +212,7 @@ public class WeaponCreation : MonoBehaviour
         {
             if (check == 1)
             {
-                gunScript.verticalRecoil = (float)-0.07;
+                gunScript.verticalRecoil = (float)-0.01;
             }
             else if (check == 2)
             {
@@ -74,7 +228,7 @@ public class WeaponCreation : MonoBehaviour
         {
             if (check == 1)
             {
-                gunScript.verticalRecoil = (float)-1.2;
+                gunScript.verticalRecoil = (float)-0.015;
             }
             else if (check == 2)
             {
@@ -90,7 +244,7 @@ public class WeaponCreation : MonoBehaviour
         {
             if (check == 1)
             {
-                gunScript.verticalRecoil = (float)-2;
+                gunScript.verticalRecoil = (float)-0.025;
             }
             else if (check == 2)
             {

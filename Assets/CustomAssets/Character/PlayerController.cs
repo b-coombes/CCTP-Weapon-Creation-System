@@ -1,4 +1,6 @@
+using System.Diagnostics.Contracts;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,7 +16,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Accessed Elsewhere")]          //variables needed for other scripts but stored here
     public bool inRange;
-    public bool vPressed = false;
+    public bool v_pressed = false;
+    public float recoil = 0;
 
 
 
@@ -51,6 +54,7 @@ public class PlayerController : MonoBehaviour
         // vertical rotation
         Vector3 e = head.eulerAngles;
         e.x -= Input.GetAxis("Mouse Y") * 2;
+        e.x += recoil;
         e.x = RestrictAngle(e.x, -85f, 85f);
         head.eulerAngles = e;
     }
@@ -69,4 +73,7 @@ public class PlayerController : MonoBehaviour
 
         return angle;
     }
+
+  
+
 }

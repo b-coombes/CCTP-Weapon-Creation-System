@@ -7,19 +7,28 @@ public class Gun : MonoBehaviour
 
     [Header("References")]
     public WeaponCreation creation;
+    public PlayerController playerController;
 
     [Header("Configurations")]
     [SerializeField]
     UnityEvent OnGunShoot;
     
     [SerializeField]
-    bool isAutomatic;
+    public bool isAutomatic;
+
+    public bool shotgun;
 
     public float bulletRange;
 
     public float fireCooldown;
 
     public float verticalRecoil;
+
+    public float shotgunSpread;
+
+    public float shotgunPellets;
+
+    public float damage;
 
     [Header("Display Variables")]
     [SerializeField] 
@@ -106,15 +115,25 @@ public class Gun : MonoBehaviour
 
     public void Recoil(Vector3 recoilAmount)
     {
+        if (playerController.recoil != verticalRecoil)
+        {
+            playerController.recoil += verticalRecoil;
+        }
+        
+        /*
         Camera.main.transform.Rotate(recoilAmount);     //rotates camera by however much is specified
         verticalRecoilCount += verticalRecoil;          //tracks how many times recoil code is run
-
+        */
+        
     }
     public void RevertRecoil(int divideReduction)
     {
+        playerController.recoil = 0;
+        /*
         verticalRecoilCount = (verticalRecoilCount/divideReduction)*-1;         //converts how many times recoil is run into how much it needs to change rotation back
         Camera.main.transform.Rotate(new Vector3(verticalRecoilCount, 0, 0));
         verticalRecoilCount = 0;
+        */
     }
 
 

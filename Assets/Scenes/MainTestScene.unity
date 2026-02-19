@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58bc1dc823a7314da8e09271928e9e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 10
+  startingHealth: 100
   health: 0
 --- !u!65 &325469264
 BoxCollider:
@@ -701,7 +701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58bc1dc823a7314da8e09271928e9e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 10
+  startingHealth: 100
   health: 0
 --- !u!65 &487525764
 BoxCollider:
@@ -951,6 +951,10 @@ PrefabInstance:
       propertyPath: 'm_BlendShapeWeights.Array.data[0]'
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: d826f56a485f8954990a44baf35b64da, type: 3}
+      propertyPath: 'm_BlendShapeWeights.Array.data[1]'
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d826f56a485f8954990a44baf35b64da, type: 3}
       propertyPath: m_Name
       value: Gun w_ shape keys
@@ -1083,7 +1087,8 @@ MonoBehaviour:
   walk_speed: 2
   run_speed: 4
   inRange: 0
-  vPressed: 0
+  v_pressed: 0
+  recoil: 0
 --- !u!23 &767409386
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1499,7 +1504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58bc1dc823a7314da8e09271928e9e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 10
+  startingHealth: 100
   health: 0
 --- !u!65 &899276188
 BoxCollider:
@@ -1876,6 +1881,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1223207334}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!137 &1250000052 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3887185075125053422, guid: d826f56a485f8954990a44baf35b64da, type: 3}
+  m_PrefabInstance: {fileID: 758950475}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1293383183
 GameObject:
   m_ObjectHideFlags: 0
@@ -2792,6 +2802,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunScript: {fileID: 1956383217}
+  gunMesh: {fileID: 1250000052}
 --- !u!114 &1956383216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2806,7 +2817,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   impactObject: {fileID: 3776154383451049800, guid: d2452299f45b9fe4e9b76a5e6cca4593, type: 3}
   gun: {fileID: 1956383217}
-  damage: 1
 --- !u!114 &1956383217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2820,6 +2830,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   creation: {fileID: 1956383215}
+  playerController: {fileID: 767409385}
   OnGunShoot:
     m_PersistentCalls:
       m_Calls:
@@ -2836,9 +2847,13 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   isAutomatic: 0
+  shotgun: 1
   bulletRange: 0
   fireCooldown: 0
   verticalRecoil: 0
+  shotgunSpread: 0
+  shotgunPellets: 0
+  damage: 0
   verticalRecoilCount: 0
   currentCooldown: 0
 --- !u!1 &1970780909
