@@ -18,6 +18,8 @@ public class Gun : MonoBehaviour
 
     public bool shotgun;
 
+    public bool sniper;
+
     public float bulletRange;
 
     public float fireCooldown;
@@ -36,6 +38,14 @@ public class Gun : MonoBehaviour
  
     public float currentCooldown;
 
+    [SerializeField]
+    bool randCooldown;
+
+    [SerializeField]
+    float randCooldownStart;
+
+    [SerializeField]
+    float randCooldownEnd;
 
 
 
@@ -105,7 +115,21 @@ public class Gun : MonoBehaviour
 
         if (Input.GetKey(KeyCode.R))
         {
-            creation.Randomise();
+            if (!randCooldown)
+            {
+                creation.Randomise();
+                randCooldown = true;
+                randCooldownStart = Time.deltaTime;
+                randCooldownEnd = randCooldownStart + 1;
+            }
+        }
+        if (randCooldown)
+        {
+            randCooldownStart += Time.deltaTime;
+            if (randCooldownStart >= randCooldownEnd)
+            {
+                randCooldown = false;
+            }
         }
 
 
