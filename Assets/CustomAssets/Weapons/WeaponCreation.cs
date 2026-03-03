@@ -9,6 +9,9 @@ public class WeaponCreation : MonoBehaviour
     public Gun gunScript;
     public SkinnedMeshRenderer gunMesh;
     private int lastType;
+    public GameObject grenadeMagazine;
+    public GameObject gun;
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()    
@@ -40,8 +43,9 @@ public class WeaponCreation : MonoBehaviour
             gunMesh.SetBlendShapeWeight(gunMesh.sharedMesh.GetBlendShapeIndex("Key 2"), 100f);
             gunScript.shotgun = true;
             gunScript.fireCooldown = 1.5f;
+            gunScript.verticalRecoil = -0.2f;
 
-            gunScript.damage = 50;
+            gunScript.damage = 30;
             gunScript.shotgunPellets = 4;
             gunScript.shotgunSpread = 0.3f;
             gunScript.bulletRange = 20;
@@ -54,8 +58,9 @@ public class WeaponCreation : MonoBehaviour
             gunScript.shotgun = true;
             gunScript.isAutomatic = true;
             gunScript.fireCooldown = 0.5f;
+            gunScript.verticalRecoil = -0.1f;
 
-            gunScript.damage = 25;
+            gunScript.damage = 15;
             gunScript.shotgunPellets = 8;
             gunScript.shotgunSpread = 0.1f;
             gunScript.bulletRange = 15;
@@ -67,9 +72,10 @@ public class WeaponCreation : MonoBehaviour
             gunMesh.SetBlendShapeWeight(gunMesh.sharedMesh.GetBlendShapeIndex("Key 1"), 0f);
             gunMesh.SetBlendShapeWeight(gunMesh.sharedMesh.GetBlendShapeIndex("Key 2"), 0f);
             gunScript.isAutomatic = true;
-            gunScript.fireCooldown = 0.3f;
+            gunScript.fireCooldown = 0.2f;
+            gunScript.verticalRecoil = -0.05f;
 
-            gunScript.damage = 50;
+            gunScript.damage = 20;
             gunScript.bulletRange = 300;
         }
 
@@ -81,8 +87,9 @@ public class WeaponCreation : MonoBehaviour
             gunScript.sniper = true;
             gunScript.isAutomatic = true;
             gunScript.fireCooldown = 0.5f;
+            gunScript.verticalRecoil = -0.1f;
 
-            gunScript.damage = 75;
+            gunScript.damage = 40;
             gunScript.bulletRange = 50;
         }
 
@@ -93,12 +100,14 @@ public class WeaponCreation : MonoBehaviour
             gunMesh.SetBlendShapeWeight(gunMesh.sharedMesh.GetBlendShapeIndex("Key 2"), 0f);
             gunScript.sniper = true;
             gunScript.fireCooldown = 1.5f;
+            gunScript.verticalRecoil = -0.2f;
 
-            gunScript.damage = 120;
+            gunScript.damage = 60;
             gunScript.bulletRange = 70;
         }
-
-
+        
+        GameObject Magazine = Instantiate(grenadeMagazine, gun.transform.position, Quaternion.identity);
+        Magazine.transform.parent = transform;
     }
 
     // Update is called once per frame

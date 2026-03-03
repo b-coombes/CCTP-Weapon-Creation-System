@@ -7,6 +7,7 @@ public class Gun : MonoBehaviour
 
     [Header("References")]
     public WeaponCreation creation;
+
     public PlayerController playerController;
 
     [Header("Configurations")]
@@ -113,7 +114,7 @@ public class Gun : MonoBehaviour
             currentCooldown -= Time.deltaTime;      //reduces cooldown by a second every second
         }
 
-        if (Input.GetKey(KeyCode.R))
+        if (Input.GetKey(KeyCode.T))
         {
             if (!randCooldown)
             {
@@ -131,10 +132,11 @@ public class Gun : MonoBehaviour
                 randCooldown = false;
             }
         }
+        
 
 
 
-    }
+        }
 
 
     public void Recoil(Vector3 recoilAmount)
