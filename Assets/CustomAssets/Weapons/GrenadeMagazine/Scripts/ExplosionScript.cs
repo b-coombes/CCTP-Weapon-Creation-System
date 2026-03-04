@@ -2,27 +2,32 @@ using UnityEngine;
 
 public class ExplosionScript : MonoBehaviour
 {
-    private float timer;
+    public float timer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        timer = Time.time + 1;
+        timer = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(timer == Time.time)
+        timer += Time.deltaTime;
+        if(timer >= 2)
         {
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
+        
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
-        if (collision.collider.gameObject.TryGetComponent(out Entity enemy))
+        if (collision.gameObject.TryGetComponent(out Entity enemy))
         {
             enemy.Health -= 50;
+            Debug.LogWarning("Target", enemy);
+            
         }
+        Debug.LogWarning("collision");
     }
 }

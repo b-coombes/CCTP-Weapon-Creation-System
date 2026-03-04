@@ -9,7 +9,6 @@ public class WeaponCreation : MonoBehaviour
     public Gun gunScript;
     public SkinnedMeshRenderer gunMesh;
     private int lastType;
-    public GameObject grenadeMagazine;
     public GameObject gun;
     
 
@@ -105,9 +104,7 @@ public class WeaponCreation : MonoBehaviour
             gunScript.damage = 60;
             gunScript.bulletRange = 70;
         }
-        
-        GameObject Magazine = Instantiate(grenadeMagazine, gun.transform.position, Quaternion.identity);
-        Magazine.transform.parent = transform;
+
     }
 
     // Update is called once per frame
