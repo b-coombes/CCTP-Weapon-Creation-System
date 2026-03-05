@@ -7,12 +7,13 @@ public class MagazineScript : MonoBehaviour
     public GameObject gunModel;
     public GameObject magazine;
     public GameObject grenadeMag;
-
+    
 
 
 
 
     private GameObject magType;
+    private Transform PlayerCamera;
 
     private float ejectTimer;
     private bool ejectStatus;
@@ -21,6 +22,7 @@ public class MagazineScript : MonoBehaviour
     void Start()
     {
         Randomise();
+        PlayerCamera = Camera.main.transform;
     }
 
     // Update is called once per frame
@@ -51,7 +53,8 @@ public class MagazineScript : MonoBehaviour
     {
         Instantiate(magType, magazine.gameObject.transform.position, Quaternion.identity);
 
-        Ray gunRay = new Ray(gunModel.transform.position, gunModel.transform.forward);
+        Ray gunRay = new Ray(PlayerCamera.position, PlayerCamera.forward);
+        Debug.DrawRay(PlayerCamera.position, PlayerCamera.forward * 100, Color.red);
         Vector3 targetPoint;
         if (Physics.Raycast(gunRay, out RaycastHit hitInfo))
         {
@@ -65,8 +68,10 @@ public class MagazineScript : MonoBehaviour
 
         magType.transform.forward = direction.normalized;
 
-        magType.GetComponent<Rigidbody>().AddForce(direction.normalized * 50, ForceMode.Impulse); ;
-
+        grenadeMag.GetComponent<Rigidbody>().AddForce(direction * 5, ForceMode.Impulse); ;
+        print(direction);
+        print(direction.normalized);
+        
         ejectStatus = true;
         
 

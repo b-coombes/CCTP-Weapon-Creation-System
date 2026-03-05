@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class GrenadeMagScript : MonoBehaviour
 {
-
+    //public MagazineScript MagazineScript;
     
     private float grenadeTimer;
 
-    //public MagazineScript MagazineScript;
+
+
     public GameObject Explosion;
 
     bool ejected;
@@ -17,6 +18,7 @@ public class GrenadeMagScript : MonoBehaviour
     void Start()
     {
         ejected = false;
+
     }
 
     // Update is called once per frame
@@ -34,7 +36,7 @@ public class GrenadeMagScript : MonoBehaviour
                 if (collision.transform.gameObject.name != "Magazine")
                 {
                     Vector3 hitPoint = collision.contacts[0].point;
-                    Instantiate(Explosion, hitPoint, Quaternion.identity);
+                    Instantiate(Explosion, this.gameObject.transform.position, Quaternion.identity);
                     Debug.LogWarning(collision.transform.gameObject.name);
                     Destroy(this.gameObject);
                 }
