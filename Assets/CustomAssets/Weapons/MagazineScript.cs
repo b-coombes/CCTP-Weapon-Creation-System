@@ -46,12 +46,16 @@ public class MagazineScript : MonoBehaviour
         {
             ejectTimer += Time.deltaTime;
         }
+        if (magType != null)
+        {
+
+        }
     }
 
 
     public void EjectMag()
     {
-        Instantiate(magType, magazine.gameObject.transform.position, Quaternion.identity);
+        GameObject ejectedMag = Instantiate(magType, magazine.gameObject.transform.position, Quaternion.identity);
 
         Ray gunRay = new Ray(PlayerCamera.position, PlayerCamera.forward);
         Debug.DrawRay(PlayerCamera.position, PlayerCamera.forward * 100, Color.red);
@@ -66,11 +70,10 @@ public class MagazineScript : MonoBehaviour
         }
         Vector3 direction = targetPoint - gunModel.transform.position;
 
-        magType.transform.forward = direction.normalized;
+        ejectedMag.transform.forward = direction.normalized;
 
-        grenadeMag.GetComponent<Rigidbody>().AddForce(direction * 5, ForceMode.Impulse); ;
-        print(direction);
-        print(direction.normalized);
+        ejectedMag.GetComponent<Rigidbody>().AddForce(direction.normalized * 20, ForceMode.Impulse);
+
         
         ejectStatus = true;
         

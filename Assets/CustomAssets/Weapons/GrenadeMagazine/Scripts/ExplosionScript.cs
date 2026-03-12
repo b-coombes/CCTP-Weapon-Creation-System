@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ExplosionScript : MonoBehaviour
 {
+    public Vector3 direction;
     public float timer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -13,7 +14,7 @@ public class ExplosionScript : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        if(timer >= 2)
+        if(timer >= 1.5f)
         {
             Destroy(this.gameObject);
         }
@@ -22,12 +23,12 @@ public class ExplosionScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.TryGetComponent(out Entity enemy))
+        if (collision.CompareTag("Target"))
         {
-            enemy.Health -= 50;
-            Debug.LogWarning("Target", enemy);
+            collision.GetComponent<Entity>().Health -= 100;
+            Debug.LogWarning("Target hit");
             
         }
-        Debug.LogWarning("collision");
+        Debug.LogWarning("explosion");
     }
 }

@@ -37,7 +37,7 @@ public class GrenadeMagScript : MonoBehaviour
                 {
                     Vector3 hitPoint = collision.contacts[0].point;
                     Instantiate(Explosion, this.gameObject.transform.position, Quaternion.identity);
-                    Debug.LogWarning(collision.transform.gameObject.name);
+                    //Debug.LogWarning(collision.transform.gameObject.name);
                     Destroy(this.gameObject);
                 }
             }
