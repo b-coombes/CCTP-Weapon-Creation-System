@@ -1379,6 +1379,8 @@ MonoBehaviour:
   gunModel: {fileID: 981503344}
   magazine: {fileID: 350714103}
   grenadeMag: {fileID: 2722755783133106620, guid: 2633d722246305a45a854d49d0956017, type: 3}
+  bluntMag: {fileID: 2722755783133106620, guid: ca8b11edfc976394ba5a78bde7dd3fbd, type: 3}
+  normalMag: {fileID: 2722755783133106620, guid: 28e029d9f038b334e89270e96adb78c2, type: 3}
 --- !u!1 &1293383183
 GameObject:
   m_ObjectHideFlags: 0
