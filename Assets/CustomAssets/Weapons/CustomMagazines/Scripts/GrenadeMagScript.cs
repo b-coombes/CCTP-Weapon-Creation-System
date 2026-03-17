@@ -12,13 +12,11 @@ public class GrenadeMagScript : MonoBehaviour
 
     public GameObject Explosion;
 
-    bool ejected;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        ejected = false;
-
+        Debug.Log("grenade GOOOO");
     }
 
     // Update is called once per frame

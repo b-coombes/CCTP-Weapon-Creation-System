@@ -1,19 +1,26 @@
 using System.Threading;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using Random = System.Random;
 
 public class MagazineScript : MonoBehaviour
 {
     public GameObject gunModel;
     public GameObject magazine;
     public GameObject grenadeMag;
-    
+    public GameObject bluntMag;
+    public GameObject normalMag;
+
 
 
 
 
     private GameObject magType;
     private Transform PlayerCamera;
+
+    private float invisTimer;
+
+    private float randCooldown;
 
     private float ejectTimer;
     private bool ejectStatus;
@@ -23,68 +30,99 @@ public class MagazineScript : MonoBehaviour
     {
         Randomise();
         PlayerCamera = Camera.main.transform;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        if (Input.GetKey(KeyCode.R))
+        if (invisTimer < Time.time)
         {
-            if (!ejectStatus)
+            magazine.GetComponent<Renderer>().enabled = true;
+
+            if (Input.GetKey(KeyCode.R))
             {
-                EjectMag();
-            }
-            
-        }
-        if (ejectTimer >= 1.5f)
-        {
-            ejectStatus = false;
-            ejectTimer = 0;
-        }
-        else
-        {
-            ejectTimer += Time.deltaTime;
-        }
-        if (magType != null)
-        {
+                if (!ejectStatus)
+                {
+                    EjectMag();
+                }
 
+            }
+            if (ejectTimer >= 1.5f)
+            {
+                ejectStatus = false;
+                ejectTimer = 0;
+            }
+            else
+            {
+                ejectTimer += Time.time;
+            }
+            if (Input.GetKey(KeyCode.T))
+            {
+                if (randCooldown < Time.time)
+                {
+                    randCooldown = Time.time + 1;
+                    Randomise();
+                }
+            }
         }
     }
 
 
     public void EjectMag()
     {
-        GameObject ejectedMag = Instantiate(magType, magazine.gameObject.transform.position, Quaternion.identity);
-
-        Ray gunRay = new Ray(PlayerCamera.position, PlayerCamera.forward);
-        Debug.DrawRay(PlayerCamera.position, PlayerCamera.forward * 100, Color.red);
-        Vector3 targetPoint;
-        if (Physics.Raycast(gunRay, out RaycastHit hitInfo))
+        if (magType != normalMag)
         {
-            targetPoint = hitInfo.point;
+            GameObject ejectedMag = Instantiate(magType, magazine.gameObject.transform.position, Quaternion.identity);
+
+            Ray gunRay = new Ray(PlayerCamera.position, PlayerCamera.forward);
+            Debug.DrawRay(PlayerCamera.position, PlayerCamera.forward * 100, Color.red);
+            Vector3 targetPoint;
+            if (Physics.Raycast(gunRay, out RaycastHit hitInfo))
+            {
+                targetPoint = hitInfo.point;
+            }
+            else
+            {
+                targetPoint = gunRay.GetPoint(75);
+            }
+            Vector3 direction = targetPoint - gunModel.transform.position;
+
+            ejectedMag.transform.forward = direction.normalized;
+
+            ejectedMag.GetComponent<Rigidbody>().AddForce(direction.normalized * 20, ForceMode.Impulse);
         }
         else
         {
-            targetPoint = gunRay.GetPoint(75);
+            GameObject ejectedMag = Instantiate(magType, magazine.gameObject.transform.position, Quaternion.identity);
         }
-        Vector3 direction = targetPoint - gunModel.transform.position;
 
-        ejectedMag.transform.forward = direction.normalized;
-
-        ejectedMag.GetComponent<Rigidbody>().AddForce(direction.normalized * 20, ForceMode.Impulse);
-
-        
+        magazine.GetComponent<Renderer>().enabled = false;
+        invisTimer = Time.time + 2;
         ejectStatus = true;
-        
-
-
     }
 
     public void Randomise() 
     {
-        magType = grenadeMag;
-  
+        magType = null;
+        Random rnd = new Random();
+        int rand = rnd.Next(1, 4);
+        if (rand == 1)
+        {
+            magType = grenadeMag;
+            Debug.Log("Grenade");
+        }
+        else if(rand == 2)
+        {
+            magType = bluntMag;
+            Debug.Log("blunt");
+        }
+        else if(rand == 3)
+        {
+            magType = normalMag;
+            Debug.Log("Normal");
+        }
+        
 
     }
 
