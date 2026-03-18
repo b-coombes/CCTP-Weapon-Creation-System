@@ -5,7 +5,7 @@ public class BluntMagScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log("blunt GOOOO");
+        //Debug.Log("blunt GOOOO");
     }
 
     // Update is called once per frame
@@ -25,7 +25,7 @@ public class BluntMagScript : MonoBehaviour
                     if (collision.gameObject.tag == "Target")
                     {
                         collision.gameObject.GetComponent<Entity>().Health -= 100;
-                        Debug.LogWarning("Target hit");
+                        //Debug.LogWarning("Target hit");
 
                     }
                     //Debug.LogWarning(collision.transform.gameObject.name);

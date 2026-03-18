@@ -16,7 +16,7 @@ public class GrenadeMagScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log("grenade GOOOO");
+        //Debug.Log("grenade GOOOO");
     }
 
     // Update is called once per frame

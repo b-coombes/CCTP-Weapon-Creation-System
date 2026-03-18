@@ -33,7 +33,10 @@ public class Gun : MonoBehaviour
 
     public float damage;
 
-    public float ammo;
+    public float maxAmmo;
+    public float currentAmmo;
+
+    public string element;
 
     public string type;
 
@@ -44,13 +47,8 @@ public class Gun : MonoBehaviour
     public float currentCooldown;
 
     [SerializeField]
-    bool randCooldown;
+    public float randCooldown;
 
-    [SerializeField]
-    float randCooldownStart;
-
-    [SerializeField]
-    float randCooldownEnd;
 
 
 
@@ -67,14 +65,23 @@ public class Gun : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0))        //on mouse HOLD specifically
+
+        if (Input.GetMouseButton(0) && currentAmmo > 0 && isAutomatic)        //on mouse HOLD specifically
         {
             shooting();
         }
-        if (Input.GetMouseButtonUp(0) && isAutomatic) 
+        if (Input.GetMouseButtonDown(0) && currentAmmo > 0 && !isAutomatic) 
+        {
+            shooting();
+        }
+        
+        /*
+        if (Input.GetMouseButtonUp(0) )//&& isAutomatic)
         {
             RevertRecoil(2);
         }
+        */
+        
         if (fired)      //doesnt affect fire rate - makes it so after 0.5 seconds recoil goes down instead of instant
         {
             if (Time.time >= timeCheck)     //if 0.5 seconds has passed from firing
@@ -96,44 +103,33 @@ public class Gun : MonoBehaviour
 
         if (Input.GetKey(KeyCode.T))
         {
-            if (!randCooldown)
+            if (Time.time > randCooldown)
             {
                 creation.Randomise();
-                randCooldown = true;
-                randCooldownStart = Time.deltaTime;
-                randCooldownEnd = randCooldownStart + 1;
+                randCooldown =Time.deltaTime + 2;
+                
             }
         }
-        if (randCooldown)
-        {
-            randCooldownStart += Time.deltaTime;
-            if (randCooldownStart >= randCooldownEnd)
-            {
-                randCooldown = false;
-            }
-        }
+        
     }
 
 
     private void shooting()
     {
-        if(isAutomatic || !fired) {
-            if (currentCooldown <= 0f)
-            {
-                OnGunShoot?.Invoke();       //uses the shoot command in DamageGun.cs
-                currentCooldown = fireCooldown;         //activates cooldown timer
-                Recoil(new Vector3(verticalRecoil, 0, 0));      //activates recoil determined by variable edited in inspector
-                if (!isAutomatic)
-                {
-                    fired = true;
-                    if (Time.time >= timeCheck)
-                    {
-                        timeCheck = (float)Time.time + (float)0.5;      //gets time 0.5 seconds after code is run
-                    }
-                }
+        if (currentCooldown <= 0f)
+        {
+            OnGunShoot?.Invoke();       //uses the shoot command in DamageGun.cs
+            currentAmmo -= 1;
+            currentCooldown = fireCooldown;         //activates cooldown timer
+            Recoil(new Vector3(verticalRecoil, 0, 0));      //activates recoil determined by variable edited in inspector
 
-            }
+            fired = true;
+            timeCheck = (float)Time.time + (float)0.5;      //gets time 0.5 seconds after code is run
+
+
+
         }
+
     }
 
 

@@ -1,15 +1,11 @@
-using System.Xml;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.PackageManager;
-using JetBrains.Annotations;
 
 public class DamageGun : MonoBehaviour
 {
     [Header("References")]
     private Transform PlayerCamera;
     public GameObject impactObject;
+    public GameObject explosiveObject;
     public Gun gun;
 
 
@@ -38,11 +34,8 @@ public class DamageGun : MonoBehaviour
             Debug.DrawRay(PlayerCamera.position, PlayerCamera.forward * 100, Color.red);
             if (Physics.Raycast(gunRay, out RaycastHit hitInfo, gun.bulletRange))
             {
-                Instantiate(impactObject, hitInfo.point, Quaternion.identity);      //creates an instance of the impact object on impact location
-                if (hitInfo.collider.gameObject.TryGetComponent(out Entity enemy))  //runs if hit entity is a target
-                {
-                    enemy.Health -= gun.damage;                                         //deals damage to targets health
-                }
+                GameObject bullet = Instantiate(impactObject, hitInfo.point, Quaternion.identity);      //creates an instance of the impact object on impact location
+                checks(bullet, hitInfo);
             }
         }
         if (gun.shotgun) 
@@ -59,17 +52,50 @@ public class DamageGun : MonoBehaviour
                 Debug.DrawRay(PlayerCamera.position, PlayerCamera.forward * 100, Color.red);
                 if (Physics.Raycast(gunRay, out RaycastHit hitInfo, gun.bulletRange))
                 {
-                    Instantiate(impactObject, hitInfo.point, Quaternion.identity);      //creates an instance of the impact object on impact location
-                    if (hitInfo.collider.gameObject.TryGetComponent(out Entity enemy))  //runs if hit entity is a target
-                    {
-                        enemy.Health -= gun.damage;                                         //deals damage to targets health
-                    }
+                    GameObject bullet = Instantiate(impactObject, hitInfo.point, Quaternion.identity);      //creates an instance of the impact object on impact location
+                    checks(bullet, hitInfo);
                 }
             }
         }
     }
 
-
+    private void checks(GameObject checkObject, RaycastHit hitInfo)
+    {
+        if (gun.element == "acid")
+        {
+            checkObject.GetComponent<Renderer>().sharedMaterial.color = Color.lightGray;
+        }
+        else if (gun.element == "water")
+        {
+            checkObject.GetComponent<Renderer>().sharedMaterial.color = Color.lightGray;
+        }
+        else if (gun.element == "lead")
+        {
+            checkObject.GetComponent<Renderer>().sharedMaterial.color = Color.lightGray;
+        }
+        else if (gun.element == "explosive")
+        {
+            Instantiate(explosiveObject, checkObject.transform.position, Quaternion.identity);
+            Debug.Log("should work");
+        }
+        
+        
+        if (hitInfo.collider.gameObject.TryGetComponent(out Entity enemy))  //runs if hit entity is a target
+        {
+            if (enemy.weakness == gun.element)
+            {
+                enemy.Health -= gun.damage * 1.5f;                          //deals damage to targets health
+            }
+            else if (gun.element == "explosive")
+            {
+                //this catches if enemy was hit by explosives and does nothing - damage handled in explosive script
+            }
+            else
+            {
+                enemy.Health -= gun.damage;
+            }
+        }
+    }
 
     // Update is called once per frame
     void Update()

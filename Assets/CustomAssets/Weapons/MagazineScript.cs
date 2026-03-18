@@ -6,10 +6,13 @@ using Random = System.Random;
 public class MagazineScript : MonoBehaviour
 {
     public GameObject gunModel;
+    public Gun gunScript;
     public GameObject magazine;
     public GameObject grenadeMag;
     public GameObject bluntMag;
     public GameObject normalMag;
+
+ 
 
 
 
@@ -20,7 +23,6 @@ public class MagazineScript : MonoBehaviour
 
     private float invisTimer;
 
-    private float randCooldown;
 
     private float ejectTimer;
     private bool ejectStatus;
@@ -36,9 +38,9 @@ public class MagazineScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (invisTimer < Time.time)
+        if (!ejectStatus)
         {
-            magazine.GetComponent<Renderer>().enabled = true;
+
 
             if (Input.GetKey(KeyCode.R))
             {
@@ -48,29 +50,33 @@ public class MagazineScript : MonoBehaviour
                 }
 
             }
-            if (ejectTimer >= 1.5f)
+        }
+        if (ejectStatus)
+        {
+            if (ejectTimer <= Time.time)
             {
-                ejectStatus = false;
                 ejectTimer = 0;
+                magazine.GetComponent<Renderer>().enabled = true;
+                ejectStatus = false;
+                gunScript.currentAmmo = gunScript.maxAmmo;
             }
-            else
+
+        }
+        if (Input.GetKey(KeyCode.T))
+        {
+            if (gunScript.randCooldown < Time.time)
             {
-                ejectTimer += Time.time;
-            }
-            if (Input.GetKey(KeyCode.T))
-            {
-                if (randCooldown < Time.time)
-                {
-                    randCooldown = Time.time + 1;
-                    Randomise();
-                }
+                gunScript.randCooldown = Time.time + 2;
+                Randomise();
             }
         }
+
     }
 
 
     public void EjectMag()
     {
+        gunScript.currentAmmo = 0;
         if (magType != normalMag)
         {
             GameObject ejectedMag = Instantiate(magType, magazine.gameObject.transform.position, Quaternion.identity);
@@ -98,8 +104,8 @@ public class MagazineScript : MonoBehaviour
         }
 
         magazine.GetComponent<Renderer>().enabled = false;
-        invisTimer = Time.time + 2;
         ejectStatus = true;
+        ejectTimer = Time.time + 2;
     }
 
     public void Randomise() 
@@ -110,20 +116,44 @@ public class MagazineScript : MonoBehaviour
         if (rand == 1)
         {
             magType = grenadeMag;
-            Debug.Log("Grenade");
+            Debug.Log("Mag type: Grenade");
         }
         else if(rand == 2)
         {
             magType = bluntMag;
-            Debug.Log("blunt");
+            Debug.Log("Mag type: Blunt");
         }
         else if(rand == 3)
         {
             magType = normalMag;
-            Debug.Log("Normal");
+            Debug.Log("Mag type: Normal");
         }
         
+        rand = rnd.Next(1, 5);
+        if (rand == 1) 
+        {
+            gunScript.element = "acid";
+            Debug.Log("Element type: Acid");
+            
+        }
+        else if (rand == 2)
+        {
+            gunScript.element = "water";
+            Debug.Log("Element type: Water");
+            
+        }
+        else if (rand == 3)
+        {
+            gunScript.element = "lead";
+            Debug.Log("Element type: Lead");
+            
+        }
+        else if (rand == 4)
+        {
+            gunScript.element = "explosive";
+            Debug.Log("Element type: Explosive");
 
+        }
     }
 
 

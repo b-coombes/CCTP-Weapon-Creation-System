@@ -26,9 +26,9 @@ public class ExplosionScript : MonoBehaviour
         if (collision.CompareTag("Target"))
         {
             collision.GetComponent<Entity>().Health -= 100;
-            Debug.LogWarning("Target hit");
+            //Debug.LogWarning("Target hit");
             
         }
-        Debug.LogWarning("explosion");
+        //Debug.LogWarning("explosion");
     }
 }
