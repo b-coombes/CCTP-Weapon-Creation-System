@@ -50,6 +50,7 @@ public class WeaponCreation : MonoBehaviour
             gunScript.bulletRange = 20;
             gunScript.maxAmmo = 2;
             gunScript.currentAmmo = gunScript.maxAmmo;
+            gunScript.type = "Shotgun";
         }
         if (type == 2)
         {
@@ -67,6 +68,7 @@ public class WeaponCreation : MonoBehaviour
             gunScript.bulletRange = 15;
             gunScript.maxAmmo = 5;
             gunScript.currentAmmo = gunScript.maxAmmo;
+            gunScript.type = "Auto Shotgun";
         }
 
         if (type == 3)
@@ -82,6 +84,7 @@ public class WeaponCreation : MonoBehaviour
             gunScript.bulletRange = 300;
             gunScript.maxAmmo = 10;
             gunScript.currentAmmo = gunScript.maxAmmo;
+            gunScript.type = "Auto Rifle";
         }
 
         if (type == 4)
@@ -98,6 +101,7 @@ public class WeaponCreation : MonoBehaviour
             gunScript.bulletRange = 50;
             gunScript.maxAmmo = 5;
             gunScript.currentAmmo = gunScript.maxAmmo;
+            gunScript.type = "Auto Sniper";
         }
 
         if (type == 5)
@@ -113,6 +117,7 @@ public class WeaponCreation : MonoBehaviour
             gunScript.bulletRange = 70;
             gunScript.maxAmmo = 3;
             gunScript.currentAmmo = gunScript.maxAmmo;
+            gunScript.type = "Sniper";
         }
 
     }

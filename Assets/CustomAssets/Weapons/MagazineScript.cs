@@ -12,9 +12,10 @@ public class MagazineScript : MonoBehaviour
     public GameObject bluntMag;
     public GameObject normalMag;
 
- 
 
 
+    public string magTypeString;
+    public float magCount;
 
 
 
@@ -38,39 +39,44 @@ public class MagazineScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!ejectStatus)
+        if (gunScript.equiped)
         {
-
-
-            if (Input.GetKey(KeyCode.R))
+            if (!ejectStatus)
             {
-                if (!ejectStatus)
+
+
+                if (Input.GetKey(KeyCode.R))
                 {
-                    EjectMag();
+                    if (!ejectStatus && magCount != 0)
+                    {
+                        EjectMag();
+                    }
+
+                }
+            }
+            if (ejectStatus)
+            {
+                if (ejectTimer <= Time.time && magCount != 0)
+                {
+                    ejectTimer = 0;
+                    magazine.GetComponent<Renderer>().enabled = true;
+                    ejectStatus = false;
+                    gunScript.currentAmmo = gunScript.maxAmmo;
                 }
 
             }
-        }
-        if (ejectStatus)
-        {
-            if (ejectTimer <= Time.time)
+            /*
+            if (Input.GetKey(KeyCode.T))
             {
-                ejectTimer = 0;
-                magazine.GetComponent<Renderer>().enabled = true;
-                ejectStatus = false;
-                gunScript.currentAmmo = gunScript.maxAmmo;
+                if (gunScript.randCooldown < Time.time)
+                {
+                    gunScript.randCooldown = Time.time + 2;
+                    Randomise();
+                }
             }
+            */
 
         }
-        if (Input.GetKey(KeyCode.T))
-        {
-            if (gunScript.randCooldown < Time.time)
-            {
-                gunScript.randCooldown = Time.time + 2;
-                Randomise();
-            }
-        }
-
     }
 
 
@@ -103,6 +109,8 @@ public class MagazineScript : MonoBehaviour
             GameObject ejectedMag = Instantiate(magType, magazine.gameObject.transform.position, Quaternion.identity);
         }
 
+        magCount -= 1;
+
         magazine.GetComponent<Renderer>().enabled = false;
         ejectStatus = true;
         ejectTimer = Time.time + 2;
@@ -112,23 +120,31 @@ public class MagazineScript : MonoBehaviour
     {
         magType = null;
         Random rnd = new Random();
-        int rand = rnd.Next(1, 4);
+        int rand = rnd.Next(2, 5);
+
+        magCount = rand;
+
+        //Magazine type----------------------------------------
+
+        rand = rnd.Next(1, 4);
+
         if (rand == 1)
         {
             magType = grenadeMag;
-            Debug.Log("Mag type: Grenade");
+            magTypeString = "Grenade";
         }
         else if(rand == 2)
         {
             magType = bluntMag;
-            Debug.Log("Mag type: Blunt");
+            magTypeString = "Blunt";
         }
         else if(rand == 3)
         {
             magType = normalMag;
-            Debug.Log("Mag type: Normal");
+            magTypeString = "Normal";
         }
         
+        //Element type----------------------------------------
         rand = rnd.Next(1, 5);
         if (rand == 1) 
         {

@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
+using TMPro;
+using Unity.VisualScripting;
 
 public class Gun : MonoBehaviour
 {
@@ -8,7 +10,11 @@ public class Gun : MonoBehaviour
     [Header("References")]
     public WeaponCreation creation;
 
-    public PlayerController playerController;
+    private PlayerController playerController;
+
+    private TMP_Text gunInfo;
+
+    public MagazineScript mag;
 
     [Header("Configurations")]
     [SerializeField]
@@ -49,70 +55,138 @@ public class Gun : MonoBehaviour
     [SerializeField]
     public float randCooldown;
 
-
+    public bool equiped;
 
 
     private bool fired;
     private float timeCheck;
+    private float holdCheck;
+    private bool proxCheck;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
-
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        gunInfo = GameObject.FindGameObjectWithTag("GunInfo").GetComponent<TMP_Text>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        if (Input.GetMouseButton(0) && currentAmmo > 0 && isAutomatic)        //on mouse HOLD specifically
+        if (equiped)
         {
-            shooting();
-        }
-        if (Input.GetMouseButtonDown(0) && currentAmmo > 0 && !isAutomatic) 
-        {
-            shooting();
-        }
-        
-        /*
-        if (Input.GetMouseButtonUp(0) )//&& isAutomatic)
-        {
-            RevertRecoil(2);
-        }
-        */
-        
-        if (fired)      //doesnt affect fire rate - makes it so after 0.5 seconds recoil goes down instead of instant
-        {
-            if (Time.time >= timeCheck)     //if 0.5 seconds has passed from firing
+            if (Input.GetMouseButton(0) && currentAmmo > 0 && isAutomatic)        //on mouse HOLD specifically
             {
-                RevertRecoil(2);            //recoil will reduce by how many fired during time
-                fired = false;
+                shooting();
+            }
+            if (Input.GetMouseButtonDown(0) && currentAmmo > 0 && !isAutomatic)
+            {
+                shooting();
+            }
+
+            /*
+            if (Input.GetMouseButtonUp(0) )//&& isAutomatic)
+            {
+                RevertRecoil(2);
+            }
+            */
+
+            if (fired)      //doesnt affect fire rate - makes it so after 0.5 seconds recoil goes down instead of instant
+            {
+                if (Time.time >= timeCheck)     //if 0.5 seconds has passed from firing
+                {
+                    RevertRecoil(2);            //recoil will reduce by how many fired during time
+                    fired = false;
+                }
+            }
+
+            if (currentCooldown <= 0f)
+            {
+                currentCooldown = 0f;       //prevents cooldown from going bellow zero, not needed but nice to have
+            }
+
+            else
+            {
+                currentCooldown -= Time.deltaTime;      //reduces cooldown by a second every second
+            }
+            /*
+            if (Input.GetKey(KeyCode.T))
+            {
+                if (Time.time > randCooldown)
+                {
+                    creation.Randomise();
+                    randCooldown =Time.deltaTime + 2;
+
+                }
+            }
+            */
+            gunInfo.text = (element.FirstCharacterToUpper() + " " + type + " - " + mag.magCount + "x Magazines(" + mag.magTypeString + ") - Ammo: " + currentAmmo.ToString());
+            Vector3 newPosition = playerController.transform.position + playerController.transform.right * 0.7f;
+            this.transform.position = newPosition;
+
+            Quaternion correction = Quaternion.Euler(-90, 0, 180);
+            this.transform.rotation = playerController.transform.GetChild(0).GetChild(0).rotation * correction;
+
+
+
+
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                holdCheck = Time.time + 0.5f;
+            }
+            if (Input.GetKeyUp(KeyCode.F))
+            {
+                if (holdCheck <= Time.time)
+                {
+                    equiped = false;
+                    this.transform.SetParent(null);
+                    this.GetComponent<BoxCollider>().enabled = true;
+                    this.GetComponent<Rigidbody>().useGravity = true;
+                }
             }
         }
-
-        if (currentCooldown <= 0f)
-        {
-            currentCooldown = 0f;       //prevents cooldown from going bellow zero, not needed but nice to have
-        }
-
         else
         {
-            currentCooldown -= Time.deltaTime;      //reduces cooldown by a second every second
-        }
-
-        if (Input.GetKey(KeyCode.T))
-        {
-            if (Time.time > randCooldown)
+            gunInfo.text = ("No gun active");
+            
+            if (proxCheck)
             {
-                creation.Randomise();
-                randCooldown =Time.deltaTime + 2;
-                
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    Debug.Log("down");
+                    holdCheck = Time.time + 2;
+                }
+                if (Input.GetKeyUp(KeyCode.F))
+                {
+                    Debug.Log("up");
+                    if (holdCheck <= Time.time)
+                    {
+                        Debug.Log("affect");
+                        equiped = true;
+                        this.transform.SetParent(playerController.gameObject.transform.GetChild(0).GetChild(0));
+                        this.GetComponent<BoxCollider>().enabled = false;
+                        this.GetComponent<Rigidbody>().useGravity = false;
+                    }
+                }
             }
         }
-        
+          
     }
-
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            proxCheck = true;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            proxCheck = false;
+        }
+    }
 
     private void shooting()
     {
@@ -125,9 +199,6 @@ public class Gun : MonoBehaviour
 
             fired = true;
             timeCheck = (float)Time.time + (float)0.5;      //gets time 0.5 seconds after code is run
-
-
-
         }
 
     }

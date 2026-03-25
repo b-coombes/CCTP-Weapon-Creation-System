@@ -85,6 +85,7 @@ public class DamageGun : MonoBehaviour
             if (enemy.weakness == gun.element)
             {
                 enemy.Health -= gun.damage * 1.5f;                          //deals damage to targets health
+                //Debug.Log("x1.5");
             }
             else if (gun.element == "explosive")
             {
@@ -93,6 +94,7 @@ public class DamageGun : MonoBehaviour
             else
             {
                 enemy.Health -= gun.damage;
+                //Debug.Log("x1");
             }
         }
     }
