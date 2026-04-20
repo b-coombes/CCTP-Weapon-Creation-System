@@ -60,8 +60,11 @@ public class Gun : MonoBehaviour
 
     private bool fired;
     private float timeCheck;
-    private float holdCheck;
+    private float holdTime = 0f;
+    private float holdDuration = 0.5f;
     private bool proxCheck;
+
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -133,13 +136,19 @@ public class Gun : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.F))
             {
-                holdCheck = Time.time + 0.5f;
+                holdTime = Time.time;
             }
             if (Input.GetKeyUp(KeyCode.F))
             {
-                if (holdCheck <= Time.time)
+                float heldTime = Time.time - holdTime;
+                if (heldTime >= holdDuration)
                 {
                     equiped = false;
+                    Vector3 newPos = playerController.gameObject.transform.GetChild(0).GetChild(0).transform.position + 
+                        playerController.gameObject.transform.GetChild(0).GetChild(0).transform.forward * 1f - 
+                        playerController.gameObject.transform.GetChild(0).GetChild(0).transform.right * 0.6f;
+                    this.transform.position = newPos;
+                    this.transform.rotation = Quaternion.Euler(0, 0, 270);
                     this.transform.SetParent(null);
                     this.GetComponent<BoxCollider>().enabled = true;
                     this.GetComponent<Rigidbody>().useGravity = true;
@@ -154,15 +163,15 @@ public class Gun : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-                    Debug.Log("down");
-                    holdCheck = Time.time + 2;
+                    holdTime = Time.time;
+
                 }
                 if (Input.GetKeyUp(KeyCode.F))
                 {
-                    Debug.Log("up");
-                    if (holdCheck <= Time.time)
+
+                    float heldTime = Time.time - holdTime;
+                    if (heldTime >= holdDuration)
                     {
-                        Debug.Log("affect");
                         equiped = true;
                         this.transform.SetParent(playerController.gameObject.transform.GetChild(0).GetChild(0));
                         this.GetComponent<BoxCollider>().enabled = false;
@@ -171,7 +180,7 @@ public class Gun : MonoBehaviour
                 }
             }
         }
-          
+
     }
     private void OnTriggerStay(Collider other)
     {
