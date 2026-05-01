@@ -28,18 +28,18 @@ public class WeaponCreation : MonoBehaviour
         Random rnd = new Random();
         int type = rnd.Next(1, 6);
         
-        while (type == lastType)
+        while (type == lastType)            //should ensure weapon created does not repeat, dont think this works because new instance is made using new script instead.
         {
             type = rnd.Next(1, 6);
         }
-        lastType = type;
+        lastType = type;        
 
 
         if (type == 1)
         {
             //shotgun
             gunMesh.SetBlendShapeWeight(gunMesh.sharedMesh.GetBlendShapeIndex("Key 1"), 0f);
-            gunMesh.SetBlendShapeWeight(gunMesh.sharedMesh.GetBlendShapeIndex("Key 2"), 100f);
+            gunMesh.SetBlendShapeWeight(gunMesh.sharedMesh.GetBlendShapeIndex("Key 2"), 100f);              //changes shape key value to match weapon type
             gunScript.shotgun = true;
             gunScript.fireCooldown = 1.5f;
             gunScript.verticalRecoil = -0.2f;

@@ -144,9 +144,9 @@ public class Gun : MonoBehaviour
                 if (heldTime >= holdDuration)
                 {
                     equiped = false;
-                    Vector3 newPos = playerController.gameObject.transform.GetChild(0).GetChild(0).transform.position + 
+                    Vector3 newPos = playerController.gameObject.transform.GetChild(0).GetChild(0).transform.position +         
                         playerController.gameObject.transform.GetChild(0).GetChild(0).transform.forward * 1f - 
-                        playerController.gameObject.transform.GetChild(0).GetChild(0).transform.right * 0.6f;
+                        playerController.gameObject.transform.GetChild(0).GetChild(0).transform.right * 0.6f;                   //sets possition to in front of player
                     this.transform.position = newPos;
                     this.transform.rotation = Quaternion.Euler(0, 0, 270);
                     this.transform.SetParent(null);
@@ -155,22 +155,22 @@ public class Gun : MonoBehaviour
                 }
             }
         }
-        else
+        else        //if no gun currently equiped
         {
             gunInfo.text = ("No gun active");
             
             if (proxCheck)
             {
-                if (Input.GetKeyDown(KeyCode.F))
+                if (Input.GetKeyDown(KeyCode.F))    //check if button held
                 {
                     holdTime = Time.time;
 
                 }
-                if (Input.GetKeyUp(KeyCode.F))
+                if (Input.GetKeyUp(KeyCode.F))          
                 {
 
                     float heldTime = Time.time - holdTime;
-                    if (heldTime >= holdDuration)
+                    if (heldTime >= holdDuration)                   //picks up gun instance
                     {
                         equiped = true;
                         this.transform.SetParent(playerController.gameObject.transform.GetChild(0).GetChild(0));
